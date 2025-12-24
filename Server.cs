@@ -85,17 +85,17 @@ namespace ESoulLink
         {
             if (!SceneEnemyHealthPool.TryGetValue(enemyName, out var value))
             {
-                SceneEnemyHealthPool[enemyName] = 0;
+                SceneEnemyHealthPool[enemyName] = 2*hp;
             }
-            if (!PlayerToEnemyPools.TryGetValue(playerId, out var value2))
-            {
-                PlayerToEnemyPools[playerId] = new List<string>();
-            }
-            if (!PlayerToEnemyPools[playerId].Contains(enemyName)) { 
-                PlayerToEnemyPools[playerId].Add(enemyName);
-            }
-            PlayerContributionToPool[enemyName + playerId.ToString()] = hp;
-            SceneEnemyHealthPool[enemyName] += hp;
+            // if (!PlayerToEnemyPools.TryGetValue(playerId, out var value2))
+            // {
+            //     PlayerToEnemyPools[playerId] = new List<string>();
+            // }
+            // if (!PlayerToEnemyPools[playerId].Contains(enemyName)) {
+            //     PlayerToEnemyPools[playerId].Add(enemyName);
+            // }
+            // PlayerContributionToPool[enemyName + playerId.ToString()] = hp;
+            // SceneEnemyHealthPool[enemyName] += hp;
             if (SceneEnemyHealthPool[enemyName] <= 0)
             {
                 SceneEnemyHealthPool[enemyName] = 0;
