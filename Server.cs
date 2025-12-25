@@ -77,7 +77,7 @@ namespace ESoulLink
             }
             if (PlayerToEnemyPools.TryGetValue(playerId, out var poolNames))
             {
-                poolNames.Remove(PoolName);
+                poolNames.Remove(poolName);
             }
         }
 
