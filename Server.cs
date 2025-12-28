@@ -18,8 +18,8 @@ namespace ESoulLink
         private IServerApi myServerApi;
 
         private Dictionary<string, int> SceneEnemyHealthPool = new();
-        private Dictionary<int, List<string>> PlayerToEnemyPools = new();
-        private Dictionary<string, int> PlayerContributionToPool = new();
+        // private Dictionary<int, List<string>> PlayerToEnemyPools = new();
+        // private Dictionary<string, int> PlayerContributionToPool = new();
 
             private char[] separator = new char[] { '|' };
 
@@ -44,41 +44,47 @@ namespace ESoulLink
             pipe.On(LeavePoolEventFactory.Instance).Do<LeavePoolEvent>((pipeEvent) => {
                 LeavePool(pipeEvent.FromPlayer, pipeEvent.EventData);
             });
+            pipe.On(ClearPoolsEventFactory.Instance).Do<ClearPoolsEvent>((pipeEvent) => {
+                ClearPools(pipeEvent.FromPlayer);
+            });
+        }
+        private void ClearPools(int playerId) {
+            SceneEnemyHealthPool.Clear();
         }
         private void LeaveAllPools(int playerId) {
-            if (PlayerToEnemyPools.TryGetValue(playerId, out var poolNames))
-            {
-                foreach (var poolName in poolNames)
-                {
-                    if(PlayerContributionToPool.TryGetValue(poolName + playerId, out var contribution))
-                    {
-                        SceneEnemyHealthPool[poolName] -= contribution;
-                        if (SceneEnemyHealthPool[poolName] <= 0)
-                        {
-                            SceneEnemyHealthPool[poolName] = 0;
-                        }
-                        pipe.Broadcast(new PoolUpdateEvent { BossName = poolName, CurrentHealth = SceneEnemyHealthPool[poolName] });
-                    }
-                }
-                poolNames.Clear();
-            }
+            // if (PlayerToEnemyPools.TryGetValue(playerId, out var poolNames))
+            // {
+            //     foreach (var poolName in poolNames)
+            //     {
+            //         if(PlayerContributionToPool.TryGetValue(poolName + playerId, out var contribution))
+            //         {
+            //             SceneEnemyHealthPool[poolName] -= contribution;
+            //             if (SceneEnemyHealthPool[poolName] <= 0)
+            //             {
+            //                 SceneEnemyHealthPool[poolName] = 0;
+            //             }
+            //             pipe.Broadcast(new PoolUpdateEvent { BossName = poolName, CurrentHealth = SceneEnemyHealthPool[poolName] });
+            //         }
+            //     }
+            //     poolNames.Clear();
+            // }
         }
         private void LeavePool(int playerId, string poolName)
         {
-            if (PlayerContributionToPool.TryGetValue(poolName + playerId, out var contribution))
-            {
-                SceneEnemyHealthPool[poolName] -= contribution;
-                if (SceneEnemyHealthPool[poolName] <= 0)
-                {
-                    SceneEnemyHealthPool[poolName] = 0;
-                }
-                pipe.Broadcast(new PoolUpdateEvent { BossName = poolName, CurrentHealth = SceneEnemyHealthPool[poolName] });
+            // if (PlayerContributionToPool.TryGetValue(poolName + playerId, out var contribution))
+            // {
+            //     SceneEnemyHealthPool[poolName] -= contribution;
+            //     if (SceneEnemyHealthPool[poolName] <= 0)
+            //     {
+            //         SceneEnemyHealthPool[poolName] = 0;
+            //     }
+            //     pipe.Broadcast(new PoolUpdateEvent { BossName = poolName, CurrentHealth = SceneEnemyHealthPool[poolName] });
 
-            }
-            if (PlayerToEnemyPools.TryGetValue(playerId, out var poolNames))
-            {
-                poolNames.Remove(poolName);
-            }
+            // }
+            // if (PlayerToEnemyPools.TryGetValue(playerId, out var poolNames))
+            // {
+            //     poolNames.Remove(poolName);
+            // }
         }
 
         private void JoinPool(int playerId,string enemyName,int hp)
@@ -105,7 +111,6 @@ namespace ESoulLink
 
         private void ModifyPool(string enemyName,int damage)
         {
-
             if (!SceneEnemyHealthPool.TryGetValue(enemyName, out var value))
             {
                 SceneEnemyHealthPool[enemyName] = 0;

@@ -3,6 +3,7 @@ using HkmpPouch;
 using Modding;
 using Satchel;
 using System.Collections.Generic;
+using ESoulLink.Events;
 using UnityEngine;
 
 namespace ESoulLink
@@ -41,6 +42,7 @@ namespace ESoulLink
                 {
                     pipeClient.ClientApi.UiManager.ChatBox.AddMessage("May the souls of your enemies be linked, the fates of your realms intertwined.");
                     On.HealthManager.Start += HealthManager_Start;
+                    ModHooks.SetPlayerBoolHook += ModHooks_SetPlayerBoolHook;
                     UnityEngine.SceneManagement.SceneManager.activeSceneChanged += SceneManager_activeSceneChanged;
                 }
                 else {
@@ -49,6 +51,21 @@ namespace ESoulLink
             });
 
             
+        }
+
+        private bool ModHooks_SetPlayerBoolHook(string name, bool orig)
+        {
+            if ((name == "atBench") && orig)
+            {
+                Satchel.CoroutineHelper.WaitForSecondsBeforeInvoke(0.5f, ClearPools);
+            }
+            return orig;
+        }
+
+        private void ClearPools()
+        {
+            Instance.Log("Send ClearPoolsEvent");
+            pipeClient.SendToServer(new ClearPoolsEvent { });
         }
 
         private void SceneManager_activeSceneChanged(UnityEngine.SceneManagement.Scene arg0, UnityEngine.SceneManagement.Scene arg1)
