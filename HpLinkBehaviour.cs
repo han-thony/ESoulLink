@@ -166,6 +166,10 @@ namespace ESoulLink
 
         void OnDestroy()
         {
+            if (hm.isDead)
+            {
+                FixedUpdate();
+            }
             LeavePool();
             ESoulLink.pipeClient.ClientApi.ClientManager.ConnectEvent -= ClientManager_ConnectEvent; ;
             ESoulLink.pipeClient.ClientApi.ClientManager.DisconnectEvent -= ClientManager_DisconnectEvent;

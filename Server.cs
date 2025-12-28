@@ -49,7 +49,13 @@ namespace ESoulLink
             });
         }
         private void ClearPools(int playerId) {
-            SceneEnemyHealthPool.Clear();
+            foreach (var keyValue in SceneEnemyHealthPool)
+            {
+                if (keyValue.Value <= 0)
+                {
+                    SceneEnemyHealthPool.Remove(keyValue.Key);
+                }
+            }
         }
         private void LeaveAllPools(int playerId) {
             // if (PlayerToEnemyPools.TryGetValue(playerId, out var poolNames))

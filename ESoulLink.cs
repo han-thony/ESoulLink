@@ -57,7 +57,7 @@ namespace ESoulLink
         {
             if ((name == "atBench") && orig)
             {
-                Satchel.CoroutineHelper.WaitForSecondsBeforeInvoke(0.5f, ClearPools);
+                Satchel.CoroutineHelper.WaitForSecondsBeforeInvoke(0.1f, ClearPools);
             }
             return orig;
         }
